@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# SQLite database (created by seed.py / app.py)
+backend/library.db
+
+# macOS
+.DS_Store
