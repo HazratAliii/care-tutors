@@ -24,8 +24,8 @@ SAMPLE_BOOKS = [
 def main():
     now = datetime.now(timezone.utc).isoformat()
     with db.connect() as connection:
+        connection.execute("DROP TABLE IF EXISTS books")
         connection.executescript(db.SCHEMA)
-        connection.execute("DELETE FROM books")
         connection.executemany(
             "INSERT INTO books (title, author, category, published_year, created_at)"
             " VALUES (?, ?, ?, ?, ?)",
