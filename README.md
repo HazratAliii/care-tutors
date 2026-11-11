@@ -80,3 +80,21 @@ Every response, including errors, is JSON, e.g. `{"error": "Title is required"}`
 backend/    Flask app (app.py), SQLite helpers (db.py), seed script, tests
 frontend/   AngularJS app: list and form views, BookService (all HTTP calls)
 ```
+
+## Notes
+
+### What I would improve with more time
+
+- Pagination and sortable columns in the book list.
+- A few frontend unit tests (at least for BookService and the form validation).
+- A proper modal dialog for the borrower's name instead of the native browser
+  prompt, and inline error messages instead of alerts.
+- Stricter input limits: maximum title/author length and a fixed category list.
+
+### Use of AI tools
+
+An AI coding assistant was used to help write the initial code for this
+project: the backend, the frontend, the tests and this README. The commit
+history shows how the project was built step by step, and every feature was
+verified by running the pytest suite, calling the API directly and using the
+app in a browser.
