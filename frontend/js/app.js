@@ -9,6 +9,16 @@ angular.module('libraryApp', ['ngRoute', 'library.services'])
       controller: 'BooksCtrl',
       controllerAs: 'vm'
     })
+    .when('/books/new', {
+      templateUrl: 'views/book-form.html',
+      controller: 'BookFormCtrl',
+      controllerAs: 'vm'
+    })
+    .when('/books/:id/edit', {
+      templateUrl: 'views/book-form.html',
+      controller: 'BookFormCtrl',
+      controllerAs: 'vm'
+    })
     .otherwise({ redirectTo: '/books' });
 }])
 
@@ -89,4 +99,54 @@ angular.module('libraryApp', ['ngRoute', 'library.services'])
 
   $scope.$watchGroup(['vm.search', 'vm.category'], load);
   load();
+}])
+
+.controller('BookFormCtrl', ['BookService', '$routeParams', '$location',
+    function (BookService, $routeParams, $location) {
+  var vm = this;
+
+  vm.isEdit = !!$routeParams.id;
+  vm.currentYear = new Date().getFullYear();
+  vm.book = { title: '', author: '', category: '', published_year: null };
+  vm.loading = vm.isEdit;
+  vm.pageError = '';
+  vm.serverError = '';
+  vm.saving = false;
+
+  if (vm.isEdit) {
+    BookService.get($routeParams.id).then(function (response) {
+      var book = response.data;
+      vm.book = {
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        published_year: book.published_year
+      };
+    }, function (response) {
+      vm.pageError = (response.data && response.data.error) || 'Could not load the book.';
+    }).finally(function () {
+      vm.loading = false;
+    });
+  }
+
+  vm.save = function () {
+    vm.serverError = '';
+    if (vm.form.$invalid) { return; }
+
+    vm.saving = true;
+    var promise = vm.isEdit
+      ? BookService.update($routeParams.id, vm.book)
+      : BookService.create(vm.book);
+
+    promise.then(function () {
+      $location.path('/books');
+    }, function (response) {
+      vm.serverError = (response.data && response.data.error) || 'Could not save the book.';
+      vm.saving = false;
+    });
+  };
+
+  vm.cancel = function () {
+    $location.path('/books');
+  };
 }]);

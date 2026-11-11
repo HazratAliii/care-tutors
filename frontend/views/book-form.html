@@ -1,0 +1,67 @@
+<div class="text-center my-5" ng-show="vm.loading">
+  <span class="spinner-border spinner-border-sm me-2"></span>
+  Loading book...
+</div>
+
+<div class="alert alert-danger" ng-show="vm.pageError">
+  {{vm.pageError}}
+  <a href="#/books">Back to the book list</a>
+</div>
+
+<div ng-show="!vm.loading && !vm.pageError">
+  <h1 class="h3 mb-3">{{vm.isEdit ? 'Edit book' : 'Add book'}}</h1>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <form name="vm.form" ng-submit="vm.save()" novalidate>
+        <div class="alert alert-danger" ng-show="vm.serverError">{{vm.serverError}}</div>
+
+        <div class="mb-3">
+          <label for="title" class="form-label">Title *</label>
+          <input type="text" id="title" name="title" class="form-control"
+                 ng-model="vm.book.title" required
+                 ng-class="{'is-invalid': vm.form.title.$invalid && (vm.form.title.$touched || vm.form.$submitted)}">
+          <div class="invalid-feedback"
+               ng-show="vm.form.title.$invalid && (vm.form.title.$touched || vm.form.$submitted)">
+            Title is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="author" class="form-label">Author *</label>
+          <input type="text" id="author" name="author" class="form-control"
+                 ng-model="vm.book.author" required
+                 ng-class="{'is-invalid': vm.form.author.$invalid && (vm.form.author.$touched || vm.form.$submitted)}">
+          <div class="invalid-feedback"
+               ng-show="vm.form.author.$invalid && (vm.form.author.$touched || vm.form.$submitted)">
+            Author is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <input type="text" id="category" name="category" class="form-control"
+                 ng-model="vm.book.category" placeholder="e.g. Fiction">
+        </div>
+
+        <div class="mb-3">
+          <label for="published_year" class="form-label">Published year *</label>
+          <input type="number" id="published_year" name="published_year" class="form-control"
+                 ng-model="vm.book.published_year" required min="1900" max="{{vm.currentYear}}"
+                 ng-class="{'is-invalid': vm.form.published_year.$invalid && (vm.form.published_year.$touched || vm.form.$submitted)}">
+          <div class="invalid-feedback"
+               ng-show="vm.form.published_year.$invalid && (vm.form.published_year.$touched || vm.form.$submitted)">
+            <span ng-show="vm.form.published_year.$error.required">Published year is required.</span>
+            <span ng-show="vm.form.published_year.$error.number">Published year must be a number.</span>
+            <span ng-show="vm.form.published_year.$error.min || vm.form.published_year.$error.max">
+              Year must be between 1900 and {{vm.currentYear}}.
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" ng-disabled="vm.saving">Save</button>
+        <button type="button" class="btn btn-outline-secondary" ng-click="vm.cancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
