@@ -29,6 +29,8 @@ angular.module('libraryApp', ['ngRoute', 'library.services'])
   vm.categories = [];
   vm.search = '';
   vm.category = '';
+  vm.sortKey = '';
+  vm.sortReverse = false;
   vm.loading = true;
   vm.error = '';
 
@@ -58,6 +60,10 @@ angular.module('libraryApp', ['ngRoute', 'library.services'])
     var params = {};
     if (vm.search) { params.search = vm.search; }
     if (vm.category) { params.category = vm.category; }
+    if (vm.sortKey) {
+      params.sort = vm.sortKey;
+      params.order = vm.sortReverse ? 'desc' : 'asc';
+    }
 
     BookService.list(params).then(function (response) {
       vm.books = response.data;
@@ -97,7 +103,16 @@ angular.module('libraryApp', ['ngRoute', 'library.services'])
     });
   };
 
-  $scope.$watchGroup(['vm.search', 'vm.category'], load);
+  vm.sortBy = function (key) {
+    if (vm.sortKey === key) {
+      vm.sortReverse = !vm.sortReverse;
+    } else {
+      vm.sortKey = key;
+      vm.sortReverse = false;
+    }
+  };
+
+  $scope.$watchGroup(['vm.search', 'vm.category', 'vm.sortKey', 'vm.sortReverse'], load);
   load();
 }])
 

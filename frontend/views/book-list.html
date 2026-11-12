@@ -31,10 +31,18 @@
   <table class="table table-hover align-middle bg-white">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Category</th>
-        <th>Year</th>
+        <th class="sort-header" ng-click="vm.sortBy('title')">
+          Title <span ng-show="vm.sortKey === 'title'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        </th>
+        <th class="sort-header" ng-click="vm.sortBy('author')">
+          Author <span ng-show="vm.sortKey === 'author'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        </th>
+        <th class="sort-header" ng-click="vm.sortBy('category')">
+          Category <span ng-show="vm.sortKey === 'category'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        </th>
+        <th class="sort-header" ng-click="vm.sortBy('published_year')">
+          Year <span ng-show="vm.sortKey === 'published_year'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        </th>
         <th>Status</th>
         <th class="text-end">Actions</th>
       </tr>

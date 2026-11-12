@@ -13,6 +13,15 @@ import db
 
 MIN_YEAR = 1900
 
+# Sortable columns; values are SQL expressions, text ones sort case-insensitively.
+SORTABLE_COLUMNS = {
+    "title": "LOWER(title)",
+    "author": "LOWER(author)",
+    "category": "LOWER(category)",
+    "published_year": "published_year",
+    "created_at": "created_at",
+}
+
 app = Flask(__name__)
 CORS(app)
 
@@ -104,7 +113,7 @@ def validate_book(data):
 
 @app.route("/api/books", methods=["GET"])
 def list_books():
-    """List books; optional query params: search, category."""
+    """List books; optional query params: search, category, sort, order."""
     query = "SELECT * FROM books WHERE 1 = 1"
     params = []
 
@@ -119,7 +128,14 @@ def list_books():
         query += " AND category = ?"
         params.append(category)
 
-    query += " ORDER BY id"
+    sort_column = SORTABLE_COLUMNS.get(request.args.get("sort", ""))
+    if sort_column:
+        order = "DESC" if request.args.get("order", "").lower() == "desc" else "ASC"
+        # The secondary id keeps the order stable when values are equal.
+        query += f" ORDER BY {sort_column} {order}, id"
+    else:
+        query += " ORDER BY id"
+
     rows = get_db().execute(query, params).fetchall()
     return jsonify([book_to_dict(row) for row in rows])
 
