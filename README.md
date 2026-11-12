@@ -5,10 +5,11 @@ AngularJS 1.8 frontend, Python Flask backend with SQLite.
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10+ (backend, tests)
+- Node.js (only for the frontend unit tests)
 
-No Node.js or internet connection is needed; the frontend libraries
-(AngularJS, Bootstrap) are included in `frontend/lib/`.
+AngularJS and Bootstrap are included in `frontend/lib/`, so running the app
+itself needs no internet connection.
 
 ## Setup
 
@@ -51,26 +52,51 @@ Open http://localhost:8080 in a browser.
 
 ## Tests
 
+Backend (3 pytest tests: add a book, borrow twice returns 409, invalid
+input returns 400):
+
 ```bash
 cd backend
 source .venv/bin/activate
 pytest
 ```
 
-Three tests: adding a book, borrowing the same book twice (409), and invalid
-input (400).
+Frontend (1 Karma/Jasmine unit test for BookService, runs headless
+Chrome):
+
+```bash
+cd frontend
+npm install
+npm test
+```
+
+## Docker Compose (optional)
+
+With Docker running, one command starts both parts — the backend seeds
+its database on startup:
+
+```bash
+docker compose up --build
+```
+
+The app is then at http://localhost:8080 and the API at
+http://localhost:5001. Stop with `docker compose down`.
 
 ## API
 
-| Method | Path                      | Purpose                                    |
-|--------|---------------------------|--------------------------------------------|
-| GET    | `/api/books`              | List books; optional `search`, `category`  |
-| POST   | `/api/books`              | Add a book                                 |
-| GET    | `/api/books/<id>`         | One book                                   |
-| PUT    | `/api/books/<id>`         | Edit a book                                |
-| DELETE | `/api/books/<id>`         | Delete a book (409 while borrowed)         |
-| POST   | `/api/books/<id>/borrow`  | Borrow; body: `{"borrower_name": "..."}`   |
-| POST   | `/api/books/<id>/return`  | Return                                     |
+| Method | Path                      | Purpose                                                       |
+|--------|---------------------------|---------------------------------------------------------------|
+| GET    | `/api/books`              | List books; optional `search`, `category`, `sort`, `order`    |
+| POST   | `/api/books`              | Add a book                                                    |
+| GET    | `/api/books/<id>`         | One book                                                      |
+| PUT    | `/api/books/<id>`         | Edit a book                                                   |
+| DELETE | `/api/books/<id>`         | Delete a book (409 while borrowed)                            |
+| POST   | `/api/books/<id>/borrow`  | Borrow; body: `{"borrower_name": "..."}`                      |
+| POST   | `/api/books/<id>/return`  | Return                                                        |
+
+`sort` accepts `title`, `author`, `category`, `published_year` or
+`created_at`; `order` is `asc` (default) or `desc`. Column headers in the
+UI are clickable to sort.
 
 Every response, including errors, is JSON, e.g. `{"error": "Title is required"}`.
 
@@ -85,8 +111,8 @@ frontend/   AngularJS app: list and form views, BookService (all HTTP calls)
 
 ### What I would improve with more time
 
-- Pagination and sortable columns in the book list.
-- A few frontend unit tests (at least for BookService and the form validation).
+- Pagination for the book list on top of the current sorting.
+- More frontend unit tests (controllers and form validation, not just the service).
 - A proper modal dialog for the borrower's name instead of the native browser
   prompt, and inline error messages instead of alerts.
 - Stricter input limits: maximum title/author length and a fixed category list.
