@@ -9,3 +9,6 @@ backend/library.db
 
 # macOS
 .DS_Store
+
+# Frontend test dependencies
+frontend/node_modules/
