@@ -3,6 +3,7 @@
 Every response, including errors, is JSON.
 Run with:  python app.py   (serves http://localhost:5001)
 """
+import os
 from datetime import datetime, timezone
 
 from flask import Flask, g, jsonify, request
@@ -283,4 +284,6 @@ def handle_unexpected_exception(exception):
 
 if __name__ == "__main__":
     db.init_db()
-    app.run(port=5001, debug=True)
+    # FLASK_HOST is set to 0.0.0.0 by Docker Compose so the API is reachable
+    # from outside the container.
+    app.run(host=os.environ.get("FLASK_HOST", "127.0.0.1"), port=5001, debug=True)
