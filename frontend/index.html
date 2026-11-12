@@ -6,7 +6,10 @@
   <title>Library Book Manager</title>
   <link rel="stylesheet" href="lib/bootstrap.min.css">
   <style>
-    .sort-header { cursor: pointer; user-select: none; }
+    .sort-header { cursor: pointer; user-select: none; white-space: nowrap; }
+    .sort-header:hover { background-color: rgba(0, 0, 0, 0.04); }
+    .sort-header.active { background-color: rgba(0, 0, 0, 0.05); }
+    .sort-hint { opacity: 0.3; font-size: 0.8em; }
   </style>
 </head>
 <body class="bg-light">

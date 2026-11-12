@@ -31,17 +31,25 @@
   <table class="table table-hover align-middle bg-white">
     <thead>
       <tr>
-        <th class="sort-header" ng-click="vm.sortBy('title')">
-          Title <span ng-show="vm.sortKey === 'title'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        <th class="sort-header" ng-click="vm.sortBy('title')" ng-class="{active: vm.sortKey === 'title'}">
+          Title
+          <span ng-show="vm.sortKey === 'title'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+          <span class="sort-hint" ng-show="vm.sortKey !== 'title'">⇅</span>
         </th>
-        <th class="sort-header" ng-click="vm.sortBy('author')">
-          Author <span ng-show="vm.sortKey === 'author'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        <th class="sort-header" ng-click="vm.sortBy('author')" ng-class="{active: vm.sortKey === 'author'}">
+          Author
+          <span ng-show="vm.sortKey === 'author'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+          <span class="sort-hint" ng-show="vm.sortKey !== 'author'">⇅</span>
         </th>
-        <th class="sort-header" ng-click="vm.sortBy('category')">
-          Category <span ng-show="vm.sortKey === 'category'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        <th class="sort-header" ng-click="vm.sortBy('category')" ng-class="{active: vm.sortKey === 'category'}">
+          Category
+          <span ng-show="vm.sortKey === 'category'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+          <span class="sort-hint" ng-show="vm.sortKey !== 'category'">⇅</span>
         </th>
-        <th class="sort-header" ng-click="vm.sortBy('published_year')">
-          Year <span ng-show="vm.sortKey === 'published_year'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+        <th class="sort-header" ng-click="vm.sortBy('published_year')" ng-class="{active: vm.sortKey === 'published_year'}">
+          Year
+          <span ng-show="vm.sortKey === 'published_year'">{{vm.sortReverse ? '▼' : '▲'}}</span>
+          <span class="sort-hint" ng-show="vm.sortKey !== 'published_year'">⇅</span>
         </th>
         <th>Status</th>
         <th class="text-end">Actions</th>
